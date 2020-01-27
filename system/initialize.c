@@ -45,10 +45,10 @@ pid32	currpid;		/* ID of currently executing process	*/
  */
 
 void	nulluser()
-{	
+{
 	struct	memblk	*memptr;	/* Ptr to memory block		*/
 	uint32	free_mem;		/* Total amount of free memory	*/
-	
+
 	/* Initialize the system */
 
 	sysinit();
@@ -83,10 +83,16 @@ void	nulluser()
 
 	//net_init();
 
-	/* Create a process to finish startup and start main */
+	/* Create a process to run main as the null user */
 
-	resume(create((void *)startup, INITSTK, INITPRIO,
-					"Startup process", 0, NULL));
+  /*
+   * @date 1/27/20 @author cornettn
+   * Changed the null user to call main directly instead of indirectly
+   * through startup().
+   */
+
+	resume(create((void *)main, INITSTK, INITPRIO,
+					"Null Process - main", 0, NULL));
 
 	/* Become the Null process (i.e., guarantee that the CPU has	*/
 	/*  something to run when no other process is ready to execute)	*/
@@ -163,9 +169,9 @@ static	void	sysinit()
 	/* Initialize the interrupt vectors */
 
 	initevec();
-	
+
 	/* Initialize free memory list */
-	
+
 	meminit();
 
 	/* Initialize system variables */
@@ -188,7 +194,7 @@ static	void	sysinit()
 		prptr->prprio = 0;
 	}
 
-	/* Initialize the Null process entry */	
+	/* Initialize the Null process entry */
 
 	prptr = &proctab[NULLPROC];
 	prptr->prstate = PR_CURR;
@@ -198,7 +204,7 @@ static	void	sysinit()
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
 	currpid = NULLPROC;
-	
+
 	/* Initialize semaphores */
 
 	for (i = 0; i < NSEM; i++) {
