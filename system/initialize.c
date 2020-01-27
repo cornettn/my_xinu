@@ -91,6 +91,8 @@ void	nulluser()
    * through startup().
    */
 
+  mymotd();
+
 	resume(create((void *)main, INITSTK, INITPRIO,
 					"Null Process - main", 0, NULL));
 
