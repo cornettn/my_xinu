@@ -93,8 +93,8 @@ void	nulluser()
 
   mymotd();
 
-	resume(create((void *)main, INITSTK, INITPRIO,
-					"Null Process - main", 0, NULL));
+	rcreate((void *)main, INITSTK, INITPRIO,
+					"Null Process - main", 0, NULL);
 
 	/* Become the Null process (i.e., guarantee that the CPU has	*/
 	/*  something to run when no other process is ready to execute)	*/
