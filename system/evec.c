@@ -52,7 +52,7 @@ int32	initevec()
 	girmask = 0;	/* Until vectors initialized */
 
 	for (i=0; i<NID; ++i) {
-		set_evec(i, (long)defevec[i]);	
+		set_evec(i, (long)defevec[i]);
 	}
 
 	/*
@@ -62,9 +62,9 @@ int32	initevec()
 	girmask = 0xfffb;	/* Leave bit 2 enabled for IC cascade */
 
 	lidt();
-	
+
 	/* Initialize the 8259A interrupt controllers */
-	
+
 	/* Master device */
 	outb(ICU1, 0x11);	/* ICW1: icw4 needed		*/
 	outb(ICU1+1, 0x20);	/* ICW2: base ivec 32		*/
@@ -80,7 +80,7 @@ int32	initevec()
 	outb(ICU2, 0xb);	/* OCW3: set ISR on read	*/
 
 	setirmask();
-	
+
         return OK;
 }
 
@@ -163,9 +163,21 @@ void	trap (
 
 	regs = sp;
 
-	/* Print the trap message */
 
-	kprintf("Xinu trap!\n");
+  /*
+   * Alter the trap message to include my username, name, and the time since
+   * bootstrapping onto the backend machine.
+   */
+
+  kprintf("\n---------\n"
+          "cornettn\n"
+          "Noah Cornett\n"
+          "Clock Time: %d\n"
+          "---------\n", clktime);
+
+  /* Print the trap message */
+
+  kprintf("Xinu trap!\n");
 	if (inum < 16) {
 		kprintf("exception %d (%s) currpid %d (%s)\n", inum,
 			inames[inum], currpid, proctab[currpid].prname);
