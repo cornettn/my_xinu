@@ -164,6 +164,8 @@ void	trap (
 	regs = sp;
 
 
+  #if XINUTEST == 1
+
   /*
    * Alter the trap message to include my username, name, and the time since
    * bootstrapping onto the backend machine.
@@ -174,6 +176,8 @@ void	trap (
           "Noah Cornett\n"
           "Clock Time: %d\n"
           "---------\n", clktime);
+
+  #endif
 
   /* Print the trap message */
 

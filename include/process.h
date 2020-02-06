@@ -1,10 +1,18 @@
 /* process.h - isbadpid */
 
+/*
+ * Macros for print statements -- 0 off, 1 on
+ */
+
+#define XINUTEST 1
+#define XINUDEBUG 1
+
+
 /* Maximum number of processes in the system */
 
 #ifndef NPROC
 #define	NPROC		8
-#endif		
+#endif
 
 /* Process state constants */
 
