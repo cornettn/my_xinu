@@ -2,8 +2,13 @@
 
 #include <xinu.h>
 
+#define UNUSED(x) (void)(x)
+
 process	main(void)
 {
+//      int zero = 0;
+//      int divide_by_zero = 1 / zero;
+//      UNUSED(divide_by_zero);
 
     	kprintf("\nI'm the first XINU app and running function main() in system/main.c.\n");
     	kprintf("\nI was created by nulluser() in system/initialize.c using create().\n");
@@ -12,7 +17,8 @@ process	main(void)
     	kprintf("\nYou can do something else, or do nothing; it's completely up to you.\n");
     	kprintf("\n...creating a shell\n");
 
-	/* Run the Xinu shell */
+
+      /* Run the Xinu shell */
 
 	recvclr();
 	resume(create(shell, 8192, 50, "shell", 1, CONSOLE));
