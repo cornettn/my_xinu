@@ -14,14 +14,13 @@ process	main(void)
   pid32 pid =  wgetpid();
   pid32 ppid = wgetppid(2);
 
-  #if XINUDEBUG == 1
-  kprintf("wgetprio(2) returned %d\n", (int) prio);
-  kprintf("getprio(2) returns %d\n", (int) getprio(2));
-  kprintf("wgetpid() returned %d\n", (int) pid);
-  kprintf("getpid returns %d\n", (int) getpid());
-  kprintf("wgetppid(2) returned %d\n", (int) ppid);
-  kprintf("getppid(2) returns %d\n", (int) getppid(2));
-  #endif
+
+  XDEBUG_KPRINTF("wgetprio(2) returned %d\n", (int) prio);
+  XDEBUG_KPRINTF("getprio(2) returns %d\n", (int) getprio(2));
+  XDEBUG_KPRINTF("wgetpid() returned %d\n", (int) pid);
+  XDEBUG_KPRINTF("getpid returns %d\n", (int) getpid());
+  XDEBUG_KPRINTF("wgetppid(2) returned %d\n", (int) ppid);
+  XDEBUG_KPRINTF("getppid(2) returns %d\n", (int) getppid(2));
 
   //rcreate(sndch, 1024, 20, "send A", 1, 'a');
   //rcreate(sndch, 1024, 20, "send B", 1, 'b');
