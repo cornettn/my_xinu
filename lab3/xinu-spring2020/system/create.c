@@ -55,6 +55,11 @@ pid32	create(
 	prptr->prdesc[1] = CONSOLE;
 	prptr->prdesc[2] = CONSOLE;
 
+  /* Lab 3 - 3/3/20 */
+  /* Add the time of birth to the process */
+
+  prptr->prbirth = clktimemilli;
+
 	/* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;

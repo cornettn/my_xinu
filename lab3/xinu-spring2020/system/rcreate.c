@@ -55,7 +55,13 @@ pid32	rcreate(
 	prptr->prdesc[1] = CONSOLE;
 	prptr->prdesc[2] = CONSOLE;
 
-	/* Initialize stack as if the process was called		*/
+  /* Lab 3 - 3/3/20 */
+  /* Add the time of birth to the process */
+
+  prptr->prbirth = clktimemilli;
+
+
+  /* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;
 	savsp = (uint32)saddr;
@@ -102,27 +108,4 @@ pid32	rcreate(
 
   restore(mask);
 	return pid;
-}
-
-/*------------------------------------------------------------------------
- *  newpid  -  Obtain a new (free) process ID
- *------------------------------------------------------------------------
- */
-local	pid32	newpid(void)
-{
-	uint32	i;			/* Iterate through all processes*/
-	static	pid32 nextpid = 1;	/* Position in table to try or	*/
-					/*   one beyond end of table	*/
-
-	/* Check all NPROC slots */
-
-	for (i = 0; i < NPROC; i++) {
-		nextpid %= NPROC;	/* Wrap around to beginning */
-		if (proctab[nextpid].prstate == PR_FREE) {
-			return nextpid++;
-		} else {
-			nextpid++;
-		}
-	}
-	return (pid32) SYSERR;
 }
