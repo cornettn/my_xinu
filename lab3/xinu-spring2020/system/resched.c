@@ -41,7 +41,26 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
-	ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
+
+
+  /* millisecond counter */
+
+  uint32 currentgrosscpu = clktimemilli;
+
+  ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
+
+  /* Lab 3 - 3/3/20 */
+  /* Update the prgrosscpu accordingly */
+
+  if (clktimemilli == currentgrosscpu) {
+    ptnew->prgrosscpu++;
+  }
+  else {
+    ptnew->prgrosscpu += clktimemilli - currentgrosscpu;
+  }
+
+  ptnew->prgrosscpu += clktimemilli - currentgrosscpu;
+
 
 	/* Old process returns here when resumed */
 
