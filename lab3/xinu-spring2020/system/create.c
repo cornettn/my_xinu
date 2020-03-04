@@ -60,6 +60,11 @@ pid32	create(
 
   prptr->prbirth = clktimemilli;
 
+  /* Lab 3 - 3/3/20 */
+  /* Initialize the procgrosscpu field */
+
+  prptr->prgrosscpu = 0;
+
 	/* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;
