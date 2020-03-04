@@ -20,7 +20,7 @@ uint32 procbirth(
     return SYSERR;
   }
 
-  uint32 birthday = proctab[pid]->prbirth;
+  uint32 birthday = proctab[pid].prbirth;
 
   restore(mask);
   return birthday;

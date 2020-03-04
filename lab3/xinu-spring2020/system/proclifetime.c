@@ -15,7 +15,7 @@ uint32 proclifetime(
   intmask mask; /* interrupts mask */
   mask = disable();
 
-  uint32 lifetime = clktimemilli - proctab[pid]->prbirth;
+  uint32 lifetime = clktimemilli - proctab[pid].prbirth;
 
   restore(mask);
   return lifetime;
