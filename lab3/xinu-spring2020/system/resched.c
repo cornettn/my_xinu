@@ -15,6 +15,8 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	/* If rescheduling is deferred, record attempt and return */
 
+//  XDEBUG_KPRINTF("In resched\n");
+
 	if (Defer.ndefers > 0) {
 		Defer.attempt = TRUE;
 		return;
@@ -45,35 +47,34 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
   /* Millisecond counter */
 
-  uint32 currentgrosscpu = clktimemilli;
+  uint32 beforecputime = clktimemilli;
 
   /* CPU clock ticks counter */
 
-  uint64 currentcputick;
-  asm volatile ( "rdtsc" : "=A"(currentcputime) );
+  uint64 beforecputick;
+  asm volatile ( "rdtsc" : "=A"(beforecputick) );
 
   ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
+
 
 	/* Old process returns here when resumed */
 
   /* Lab 3 - 3/3/20 */
   /* Update the prgrosscpu accordingly */
 
-  if (clktimemilli == currentgrosscpu) {
+  if (clktimemilli == beforecputime) {
     ptnew->prgrosscpu++;
   }
   else {
-    ptnew->prgrosscpu += clktimemilli - currentgrosscpu;
+    ptnew->prgrosscpu += clktimemilli - beforecputime;
   }
 
   /* Updated the prgrosscputick accordingly */
 
-  uint64 updatedcputick;
-  asm volatile ( "rdtsc" : "=A"(updatedcputime) );
+  uint64 aftercputick;
+  asm volatile ( "rdtsc" : "=A"(aftercputick) );
 
-  ptnew->prgrosscputick += updatedcputick - currentcputick;
-
-
+  ptnew->prgrosscputick += aftercputick - beforecputick;
 
 	return;
 }
