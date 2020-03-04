@@ -2,7 +2,7 @@
 
 
 #define XINUTEST 1 /* set to 1 */
-#define XINUDEBUG 0 /* User debug. should be 0 in final turnin */
+#define XINUDEBUG 1 /* User debug. should be 0 in final turnin */
 
  /* for print required for labs */
 #if XINUTEST
@@ -71,6 +71,7 @@ struct procent {		/* Entry in the process table		*/
   uint32 prbirth; /* The time of birth of the process in relation to
                      clktimemilli */
 	uint32 prgrosscpu; /* Tracks the gross cpu time of this process */
+  uint64 prgrosscputick; /* The number of clock cycles for this process */
   umsg32	prmsg;		/* Message sent to this process		*/
 	bool8	prhasmsg;	/* Nonzero iff msg is valid		*/
 	int16	prdesc[NDESC];	/* Device descriptors for process	*/
