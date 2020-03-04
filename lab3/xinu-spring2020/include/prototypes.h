@@ -630,3 +630,8 @@ extern syscall wgetprio(pid32);
 /* in file wgetppid.c */
 extern pid32 wgetppid(pid32);
 
+/* in file procbirth.c */
+extern uint32 procbirth(pid32);
+
+/* in file proclifetime.c */
+extern uint32 proclifetime(pid32);
