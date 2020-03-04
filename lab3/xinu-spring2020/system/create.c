@@ -65,6 +65,11 @@ pid32	create(
 
   prptr->prgrosscpu = 0;
 
+  /* Lab 3 - 3/3/20 */
+  /* Initialize the prgrosscputick field */
+
+  prptr->prgrosscputick = 0;
+
 	/* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;

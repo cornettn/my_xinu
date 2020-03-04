@@ -43,11 +43,18 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	preempt = QUANTUM;		/* Reset time slice for process	*/
 
 
-  /* millisecond counter */
+  /* Millisecond counter */
 
   uint32 currentgrosscpu = clktimemilli;
 
+  /* CPU clock ticks counter */
+
+  uint64 currentcputick;
+  asm volatile ( "rdtsc" : "=A"(currentcputime) );
+
   ctxsw(&ptold->prstkptr, &ptnew->prstkptr);
+
+	/* Old process returns here when resumed */
 
   /* Lab 3 - 3/3/20 */
   /* Update the prgrosscpu accordingly */
@@ -59,10 +66,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
     ptnew->prgrosscpu += clktimemilli - currentgrosscpu;
   }
 
-  ptnew->prgrosscpu += clktimemilli - currentgrosscpu;
+  /* Updated the prgrosscputick accordingly */
+
+  uint64 updatedcputick;
+  asm volatile ( "rdtsc" : "=A"(updatedcputime) );
+
+  ptnew->prgrosscputick += updatedcputick - currentcputick;
 
 
-	/* Old process returns here when resumed */
 
 	return;
 }
