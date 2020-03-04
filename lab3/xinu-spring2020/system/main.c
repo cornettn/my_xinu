@@ -4,30 +4,45 @@
 
 #define UNUSED(x) (void)(x)
 
-
-void sndch(char);
+void check(pid32);
+void p1();
 
 process	main(void)
 {
 
-  int prio = (int) wgetprio(2);
-  pid32 pid =  wgetpid();
-  pid32 ppid = wgetppid(2);
+  pid32 pid = rcreate(p1, 1024, 20, "p1", 0);
 
+  while(1){
+    XDEBUG_KPRINTF(
+        "------------------------------\n"
+        "P1 Process\n"
+        "------------------------------\n");
+    check(pid);
+    sleep(1);
+  }
 
-  XDEBUG_KPRINTF("wgetprio(2) returned %d\n", (int) prio);
-  XDEBUG_KPRINTF("getprio(2) returns %d\n", (int) getprio(2));
-  XDEBUG_KPRINTF("wgetpid() returned %d\n", (int) pid);
-  XDEBUG_KPRINTF("getpid returns %d\n", (int) getpid());
-  XDEBUG_KPRINTF("wgetppid(2) returned %d\n", (int) ppid);
-  XDEBUG_KPRINTF("getppid(2) returns %d\n", (int) getppid(2));
-
-  //rcreate(sndch, 1024, 20, "send A", 1, 'a');
-  //rcreate(sndch, 1024, 20, "send B", 1, 'b');
 }
 
-void sndch(char ch) {
-  while(1) {
-    kprintf("%c", ch);
+/* infinite loop */
+
+void p1() {
+  while (1){
+    ;
   }
+}
+
+
+void check(pid32 pid) {
+
+  XDEBUG_KPRINTF("Current milli time: %d\n", clktimemilli);
+
+  uint32 lifetime = proclifetime(pid);
+  XDEBUG_KPRINTF("Process %d has lifetime %d\n", pid, lifetime);
+
+  uint32 grosscpumilli = procgrosscpu(pid);
+  XDEBUG_KPRINTF("Process %d has gross cpu %d\n", pid, grosscpumilli);
+
+  uint64 grosscpumicro = procgrosscpumicro(pid);
+  XDEBUG_KPRINTF("Process %d has gross cpu ticks %d\n", pid, grosscpumicro);
+
 }
