@@ -70,7 +70,8 @@ struct procent {		/* Entry in the process table		*/
 	pid32	prparent;	/* ID of the creating process		*/
   uint32 prbirth; /* The time of birth of the process in relation to
                      clktimemilli */
-	umsg32	prmsg;		/* Message sent to this process		*/
+	uint32 prgrosscpu; /* Tracks the gross cpu time of this process */
+  umsg32	prmsg;		/* Message sent to this process		*/
 	bool8	prhasmsg;	/* Nonzero iff msg is valid		*/
 	int16	prdesc[NDESC];	/* Device descriptors for process	*/
 };
