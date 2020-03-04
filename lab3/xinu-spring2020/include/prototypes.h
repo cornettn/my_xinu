@@ -639,3 +639,5 @@ extern uint32 proclifetime(pid32);
 /* in file procgrosscpu.c */
 extern uint32 procgrosscpu(pid32);
 
+/* in file procgrosscpumicro.c */
+extern uint32 procgrosscpumicro(pid32);
