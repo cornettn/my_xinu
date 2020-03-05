@@ -644,3 +644,10 @@ extern uint32 procgrosscpumicro(pid32);
 
 /* in file rinsert.c */
 extern status rinsert(pid32, qid16, int32);
+
+/* in file testcpu.c */
+extern void testcpu(void);
+
+/* in file testio.c */
+extern void testio(void);
+
