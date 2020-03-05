@@ -73,6 +73,7 @@ struct procent {		/* Entry in the process table		*/
                      clktimemilli */
 	uint32 prgrosscpu; /* Tracks the gross cpu time of this process */
   uint64 prgrosscputick; /* The number of clock cycles for this process */
+  uint32 prvgrosscpu; /* Virtual cpu time used for fair scheduling */
   umsg32	prmsg;		/* Message sent to this process		*/
 	bool8	prhasmsg;	/* Nonzero iff msg is valid		*/
 	int16	prdesc[NDESC];	/* Device descriptors for process	*/
