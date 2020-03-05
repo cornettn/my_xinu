@@ -40,7 +40,7 @@ pid32	dequeue(
 	pid32	pid;			/* ID of process removed	*/
 
 	if (isbadqid(q)) {
-		return SYSERR;
+    return SYSERR;
 	} else if (isempty(q)) {
 		return EMPTY;
 	}

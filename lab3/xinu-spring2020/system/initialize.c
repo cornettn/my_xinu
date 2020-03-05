@@ -193,14 +193,23 @@ static	void	sysinit()
 		prptr->prstate = PR_FREE;
 		prptr->prname[0] = NULLCH;
 		prptr->prstkbase = NULL;
-		prptr->prprio = 0;
+
+    /* Lab 3 - change proc table to order priority in non-decreasing
+     *         order, so initialize probtable to be max prio value.
+     *         It was originally set to be 0. */
+
+    prptr->prprio = MAXPRIO;
 	}
 
 	/* Initialize the Null process entry */
 
 	prptr = &proctab[NULLPROC];
 	prptr->prstate = PR_CURR;
-	prptr->prprio = 0;
+
+  /* Lab 3 - change NULL proc to have MAXPRIO value to accomodate
+   *         for non-decreasing priority */
+
+	prptr->prprio = MAXPRIO;
 	strncpy(prptr->prname, "prnull", 7);
 	prptr->prstkbase = getstk(NULLSTK);
 	prptr->prstklen = NULLSTK;
@@ -223,6 +232,12 @@ static	void	sysinit()
 	/* Create a ready list for processes */
 
 	readylist = newqueue();
+
+  /* Rearrange the ready list so that the tail has key MAXKEY
+   * and the head has key MINKEY to account for nondecreasing order */
+
+  queuetab[queuetail(readylist)].qkey = MAXKEY;
+  queuetab[queuehead(readylist)].qkey = MINKEY;
 
 	/* Initialize the real time clock */
 

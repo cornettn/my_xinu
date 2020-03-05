@@ -27,22 +27,29 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	ptold = &proctab[currpid];
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
-		if (ptold->prprio > firstkey(readylist)) {
-			return;
+
+    /* Change the comparator to accomodate for non-decreasing sched. */
+
+    if (ptold->prprio < firstkey(readylist)) {
+      return;
 		}
 
 		/* Old process will no longer remain current */
 
 		ptold->prstate = PR_READY;
-		insert(currpid, readylist, ptold->prprio);
+
+    /* Lab 3 - use risert instead of insert */
+    rinsert(currpid, readylist, ptold->prprio);
 	}
 
 	/* Force context switch to highest priority ready process */
+
 
 	currpid = dequeue(readylist);
 	ptnew = &proctab[currpid];
 	ptnew->prstate = PR_CURR;
 	preempt = QUANTUM;		/* Reset time slice for process	*/
+
 
 
   /* Millisecond counter */

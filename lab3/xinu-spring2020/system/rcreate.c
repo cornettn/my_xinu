@@ -29,7 +29,11 @@ pid32	rcreate(
 	if (ssize < MINSTK)
 		ssize = MINSTK;
 	ssize = (uint32) roundmb(ssize);
-	if ( (priority < 1) || ((pid=newpid()) == SYSERR) ||
+
+  /* lab 3 - Change first check from priority < 1, to = MAXPRIO
+   *         to acomodate for non-decreasing sched. */
+
+	if ( (priority == MAXPRIO) || ((pid=newpid()) == SYSERR) ||
 	     ((saddr = (uint32 *)getstk(ssize)) == (uint32 *)SYSERR) ) {
 		restore(mask);
 		return SYSERR;
@@ -110,6 +114,7 @@ pid32	rcreate(
 	*pushsp = (unsigned long) (prptr->prstkptr = (char *)saddr);
 
   /* Call ready() to immediately make the pid ready to run */
+
 
   if (ready(pid) == SYSERR) {
     restore(mask);

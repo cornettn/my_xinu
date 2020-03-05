@@ -20,9 +20,14 @@ status	ready(
 
 	/* Set process state to indicate ready and add to ready list */
 
+
 	prptr = &proctab[pid];
 	prptr->prstate = PR_READY;
-	insert(pid, readylist, prptr->prprio);
+
+  /* Lab 3 - Use rinsert instead of insert to accomodate for
+   *         non-decreasing shed. */
+
+  rinsert(pid, readylist, prptr->prprio);
 	resched();
 
 	return OK;
