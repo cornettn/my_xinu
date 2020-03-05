@@ -94,7 +94,7 @@ void	nulluser()
   mymotd();
 
 	rcreate((void *)main, INITSTK, INITPRIO,
-					"Null Process - main", 0, NULL);
+					"Main", 0, NULL);
 
 	/* Become the Null process (i.e., guarantee that the CPU has	*/
 	/*  something to run when no other process is ready to execute)	*/
@@ -214,6 +214,7 @@ static	void	sysinit()
 	prptr->prstkbase = getstk(NULLSTK);
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
+  prptr->prvgrosscpu = 100;
 	currpid = NULLPROC;
 
 	/* Initialize semaphores */

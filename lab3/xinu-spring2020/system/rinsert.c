@@ -18,8 +18,6 @@ status rinsert(
 	qid16	curr;			/* Runs through items in a queue*/
 	qid16	prev;			/* Holds previous node index	*/
 
-  XDEBUG_KPRINTF("\n");
-
   if (isbadqid(q) || isbadpid(pid)) {
 		return SYSERR;
 	}

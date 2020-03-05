@@ -22,12 +22,26 @@ status	ready(
 
 
 	prptr = &proctab[pid];
-	prptr->prstate = PR_READY;
+
+  if (prptr->prstate == PR_SLEEP) {
+    if (currpid == NULLPROC) {
+      prptr->prvgrosscpu = proctab[NULLPROC].prvgrosscpu++;
+    }
+    else {
+      prptr->prvgrosscpu = firstkey(readylist);
+      if (firstid(readylist) == NULLPROC) {
+        firstkey(readylist)++;
+        proctab[NULLPROC].prvgrosscpu++;
+      }
+    }
+  }
+
+  prptr->prstate = PR_READY;
 
   /* Lab 3 - Use rinsert instead of insert to accomodate for
    *         non-decreasing shed. */
 
-  rinsert(pid, readylist, prptr->prprio);
+  rinsert(pid, readylist, prptr->prvgrosscpu);
 	resched();
 
 	return OK;

@@ -70,6 +70,14 @@ pid32	create(
 
   prptr->prgrosscputick = 0;
 
+
+  /* Initialize the prvgrosscpu */
+  prptr->prvgrosscpu = lastkey(readylist);  //proctab[lastid(readylist)].prvgrosscpu;
+  if (lastid(readylist) == NULLPROC) {
+    lastkey(readylist)++;
+    proctab[NULLPROC].prvgrosscpu = lastkey(readylist);
+  }
+
 	/* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;

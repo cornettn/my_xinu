@@ -13,9 +13,8 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	struct procent *ptold;	/* Ptr to table entry for old process	*/
 	struct procent *ptnew;	/* Ptr to table entry for new process	*/
 
-	/* If rescheduling is deferred, record attempt and return */
 
-//  XDEBUG_KPRINTF("In resched\n");
+    /* If rescheduling is deferred, record attempt and return */
 
 	if (Defer.ndefers > 0) {
 		Defer.attempt = TRUE;
@@ -30,16 +29,20 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
     /* Change the comparator to accomodate for non-decreasing sched. */
 
-    if (ptold->prprio < firstkey(readylist)) {
-      return;
-		}
+    //  if (currpid != NULLPROC &&
+    //      ptold->prvgrosscpu < firstkey(readylist)) {
+    //    return;
+	  //	}
 
 		/* Old process will no longer remain current */
 
 		ptold->prstate = PR_READY;
 
-    /* Lab 3 - use risert instead of insert */
-    rinsert(currpid, readylist, ptold->prprio);
+    /* Lab 3 - use rinsert instead of insert */
+
+    rinsert(currpid, readylist, ptold->prvgrosscpu);
+
+
 	}
 
 	/* Force context switch to highest priority ready process */
@@ -71,9 +74,11 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
   if (clktimemilli == beforecputime) {
     ptnew->prgrosscpu++;
+    ptnew->prvgrosscpu++;
   }
   else {
     ptnew->prgrosscpu += clktimemilli - beforecputime;
+    ptnew->prvgrosscpu += clktimemilli - beforecputime;
   }
 
   /* Updated the prgrosscputick accordingly */
@@ -82,6 +87,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
   asm volatile ( "rdtsc" : "=A"(aftercputick) );
 
   ptnew->prgrosscputick += aftercputick - beforecputick;
+
+
+  if (ptnew->prvgrosscpu >= proctab[NULLPROC].prvgrosscpu) {
+    proctab[NULLPROC].prvgrosscpu = ptnew->prvgrosscpu + 1;
+    if (lastid(readylist) == NULLPROC) {
+      lastkey(readylist) = proctab[NULLPROC].prvgrosscpu;
+    }
+  }
 
 	return;
 }
