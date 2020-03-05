@@ -15,7 +15,20 @@ process	main(void)
 {
 
   #if PART_FIVE == 1
+/*
+  resume(create((void *) testcpu, 1024, 20, "1", 0));
+  resume(create((void *) testcpu, 1024, 20, "2", 0));
+  resume(create((void *) testcpu, 1024, 20, "3", 0));
+  resume(create((void *) testcpu, 1024, 20, "4", 0));
+*/
+  /*
+  resume(create((void *) testio, 1024, 20, "5", 0));
+  resume(create((void *) testio, 1024, 20, "6", 0));
+  resume(create((void *) testio, 1024, 20, "7", 0));
+  resume(create((void *) testio, 1024, 20, "8", 0));
+ */
 
+/*
   resume(create((void *) testcpu, 1024, 20, "1", 0));
   resume(create((void *) testcpu, 1024, 20, "2", 0));
   resume(create((void *) testcpu, 1024, 20, "3", 0));
@@ -24,7 +37,18 @@ process	main(void)
   resume(create((void *) testio, 1024, 20, "6", 0));
   resume(create((void *) testio, 1024, 20, "7", 0));
   resume(create((void *) testio, 1024, 20, "8", 0));
+*/
 
+  ///*
+  resume(create((void *) testcpu, 1024, 20, "1", 0));
+  sleepms(500);
+  resume(create((void *) testcpu, 1024, 20, "2", 0));
+  sleepms(500);
+  resume(create((void *) testcpu, 1024, 20, "3", 0));
+  sleepms(500);
+  resume(create((void *) testcpu, 1024, 20, "4", 0));
+  sleepms(500);
+//*/
   #endif
 
 

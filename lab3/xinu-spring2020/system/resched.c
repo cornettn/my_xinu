@@ -27,10 +27,14 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 	if (ptold->prstate == PR_CURR) {  /* Process remains eligible */
 
-    /* Change the comparator to accomodate for non-decreasing sched. */
+    /* Lab 3 - 3/4/20
+     * Change the comparator to accomodate for non-decreasing sched.
+     * Comment out this comparison because priority is now dependent on
+     * the prvgrosscpu value, and this value is not updated until after
+     * ctxsw() returns, so this if statement would prevent the prvgrosscpu
+     * from ever updating */
 
-    //  if (currpid != NULLPROC &&
-    //      ptold->prvgrosscpu < firstkey(readylist)) {
+    //  if (ptold->prvgrosscpu < firstkey(readylist)) {
     //    return;
 	  //	}
 
@@ -38,7 +42,10 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
 		ptold->prstate = PR_READY;
 
-    /* Lab 3 - use rinsert instead of insert */
+    /* Lab 3, Part 4
+     * - use rinsert instead of insert
+     * - Additionally, use the prvgrosscpu value as the priority in order to implement
+     * a form of far scheduling. */
 
     rinsert(currpid, readylist, ptold->prvgrosscpu);
 
@@ -70,7 +77,9 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 	/* Old process returns here when resumed */
 
   /* Lab 3 - 3/3/20 */
-  /* Update the prgrosscpu accordingly */
+  /* - Update the prgrosscpu accordingly
+   * - Update the prvgrosscpu value as well to implement fair sched.
+   * */
 
   if (clktimemilli == beforecputime) {
     ptnew->prgrosscpu++;
@@ -88,6 +97,11 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
 
   ptnew->prgrosscputick += aftercputick - beforecputick;
 
+
+  /* Lab 3, Part 4
+   * - Ensure that the NULLPROC always has the lowest priority
+   *   (highest prvgrosscpu value). Update the ready list to reflect
+   *   change as well. */
 
   if (ptnew->prvgrosscpu >= proctab[NULLPROC].prvgrosscpu) {
     proctab[NULLPROC].prvgrosscpu = ptnew->prvgrosscpu + 1;

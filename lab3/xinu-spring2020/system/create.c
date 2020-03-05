@@ -71,8 +71,11 @@ pid32	create(
   prptr->prgrosscputick = 0;
 
 
-  /* Initialize the prvgrosscpu */
-  prptr->prvgrosscpu = lastkey(readylist);  //proctab[lastid(readylist)].prvgrosscpu;
+  /* Lab 3 Part 4
+   * - Initialize prvgrosscpu to be the lowest priority
+   * - Ensure that NULLPROC still has the lowest priority
+   */
+  prptr->prvgrosscpu = lastkey(readylist);
   if (lastid(readylist) == NULLPROC) {
     lastkey(readylist)++;
     proctab[NULLPROC].prvgrosscpu = lastkey(readylist);

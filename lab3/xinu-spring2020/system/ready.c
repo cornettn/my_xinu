@@ -23,13 +23,29 @@ status	ready(
 
 	prptr = &proctab[pid];
 
+
+  /* Lab 3 Part 4
+   * - If the newly ready process was just asleep, assign the priority to
+   *   be the highest (lowest prvgrosscpu value in the ready list)
+   */
+
   if (prptr->prstate == PR_SLEEP) {
     if (currpid == NULLPROC) {
+
+      /* This implies that the ready list is empty because the
+       * NULLPROC is running */
+
       prptr->prvgrosscpu = proctab[NULLPROC].prvgrosscpu++;
     }
     else {
+
+      /* Assign the prvgrossvalue to be the lowest value in the ready list */
+
       prptr->prvgrosscpu = firstkey(readylist);
       if (firstid(readylist) == NULLPROC) {
+
+        /* Ensure that NULLPROC remains the lowest prio */
+
         firstkey(readylist)++;
         proctab[NULLPROC].prvgrosscpu++;
       }

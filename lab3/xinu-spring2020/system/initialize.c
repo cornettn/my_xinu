@@ -214,7 +214,7 @@ static	void	sysinit()
 	prptr->prstkbase = getstk(NULLSTK);
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
-  prptr->prvgrosscpu = 100;
+  prptr->prvgrosscpu = 0;
 	currpid = NULLPROC;
 
 	/* Initialize semaphores */
