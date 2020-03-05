@@ -50,6 +50,35 @@ status	ready(
         proctab[NULLPROC].prvgrosscpu++;
       }
     }
+
+    /* Really ensure that NULLPROC is last */
+
+    if ((currpid != NULLPROC) &&
+        (prptr->prvgrosscpu >= queuetab[NULLPROC].qkey)) {
+      queuetab[NULLPROC].qkey = prptr->prvgrosscpu + 1;
+      proctab[NULLPROC].prvgrosscpu = queuetab[NULLPROC].qkey;
+
+      if (queuetab[NULLPROC].qnext != queuetail(readylist)) {
+
+        /* If Null proc is not already last,
+        * Ensure that the NULLPROC is the last entry in the ready list */
+
+        XDEBUG_KPRINTF("Rearranging ready list\n");
+
+        qid16 nprev = queuetab[NULLPROC].qprev;
+        qid16 nnext = queuetab[NULLPROC].qnext;
+
+        queuetab[NULLPROC].qprev = queuetab[queuetail(readylist)].qprev;
+        queuetab[queuetab[queuetail(readylist)].qprev].qnext = NULLPROC;
+
+        queuetab[NULLPROC].qnext = queuetail(readylist);
+        queuetab[queuetail(readylist)].qprev = NULLPROC;
+
+        queuetab[nprev].qnext = nnext;
+        queuetab[nnext].qprev = nprev;
+      }
+    }
+
   }
 
   prptr->prstate = PR_READY;
