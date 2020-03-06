@@ -87,7 +87,7 @@ void	resched(void)		/* Assumes interrupts are disabled	*/
   }
   else {
     ptnew->prgrosscpu += clktimemilli - beforecputime;
-    ptnew->prvgrosscpu += clktimemilli - beforecputime;
+//    ptnew->prvgrosscpu += clktimemilli - beforecputime;
   }
 
   /* Updated the prgrosscputick accordingly */
