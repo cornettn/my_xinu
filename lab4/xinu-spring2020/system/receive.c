@@ -11,6 +11,8 @@ umsg32	receive(void)
 	intmask	mask;			/* Saved interrupt mask		*/
 	struct	procent *prptr;		/* Ptr to process's table entry	*/
 	umsg32	msg;			/* Message to return		*/
+  struct procent *sndprptr;    /* Ptr to the next sender proc */
+  pid32 sndproc;    /* pid of the next sender proc */
 
 	mask = disable();
 	prptr = &proctab[currpid];
@@ -19,7 +21,31 @@ umsg32	receive(void)
 		resched();		/* Block until message arrives	*/
 	}
 	msg = prptr->prmsg;		/* Retrieve message		*/
-	prptr->prhasmsg = FALSE;	/* Reset message flag		*/
+
+  if (prptr->prsenderflag == TRUE) {
+    /* Another process has a message to be sent to the curr proc */
+
+    /* Get the process who is waiting to send msg */
+    sndproc = dequeue(prptr->prblockedsenders)
+    sndprptr = &proctab[sndproc];
+
+    /* Send the message */
+    prptr->prmsg = sndprptr->prsndmsg;
+
+    /* Insert sndproc into the ready list */
+    sndprptr->prstate = PR_READY;
+    insert(sndproc, readylist, sndprptr->prprio);
+
+    /* If there are no more blocked senders, adjust the flag accordingly */
+    if (isempty(prptr->prblockedsenders)) {
+      prptr->prsenderflag == FALSE;
+    }
+  }
+  else {
+    /* No other proc are waiting to send msg */
+    prptr->prhasmsg = FALSE;	/* Reset message flag		*/
+  }
+
 	restore(mask);
 	return msg;
 }
