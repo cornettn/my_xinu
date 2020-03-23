@@ -4,9 +4,22 @@
  * Macros for print statements -- 0 off, 1 on
  */
 
-#define XINUTEST 0
-#define XINUDEBUG 0
+#define XINUTEST 1 /* set to 1 */
+#define XINUDEBUG 1 /* User debug. should be 0 in final turnin */
 
+ /* for print required for labs */
+#if XINUTEST
+#define XTEST_KPRINTF(...) kprintf(__VA_ARGS__)
+#else
+#define XTEST_KPRINTF(...)
+#endif
+
+ /* User debug */
+#if XINUDEBUG
+#define XDEBUG_KPRINTF(...) kprintf(__VA_ARGS__)
+#else
+#define XDEBUG_KPRINTF(...)
+#endif
 
 /* Maximum number of processes in the system */
 
