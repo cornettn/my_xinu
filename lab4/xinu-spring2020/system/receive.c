@@ -17,28 +17,31 @@ umsg32	receive(void)
 	mask = disable();
 	prptr = &proctab[currpid];
 	if (prptr->prhasmsg == FALSE) {
-		prptr->prstate = PR_RECV;
+    prptr->prstate = PR_RECV;
 		resched();		/* Block until message arrives	*/
 	}
+
 	msg = prptr->prmsg;		/* Retrieve message		*/
 
   if (prptr->prsenderflag == TRUE) {
     /* Another process has a message to be sent to the curr proc */
 
     /* Get the process who is waiting to send msg */
-    sndproc = dequeue(prptr->prblockedsenders)
+    sndproc = dequeue(prptr->prblockedsenders);
     sndprptr = &proctab[sndproc];
 
     /* Send the message */
     prptr->prmsg = sndprptr->prsndmsg;
 
     /* Insert sndproc into the ready list */
-    sndprptr->prstate = PR_READY;
-    insert(sndproc, readylist, sndprptr->prprio);
+
+    /* TODO: Figure out if I should use ready, or manually change
+     * the state and insert into the list */
+    ready(sndproc);
 
     /* If there are no more blocked senders, adjust the flag accordingly */
     if (isempty(prptr->prblockedsenders)) {
-      prptr->prsenderflag == FALSE;
+      prptr->prsenderflag = FALSE;
     }
   }
   else {
