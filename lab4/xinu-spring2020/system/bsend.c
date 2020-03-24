@@ -25,7 +25,7 @@ syscall	bsend(
   currprptr = &proctab[getpid()];
 
 
-  if (prptr->prhasmsg) {
+  if (prptr->prhasmsg == TRUE) {
     /* Receivers buffer is full */
 
     /* Change the state to PR_SND from current */
@@ -37,7 +37,7 @@ syscall	bsend(
 
     /* Block until the message can be sent */
     resched();
-	}
+  }
 
   /* Receivers buffer is empty */
 	prptr->prmsg = msg;		/* Deliver message		*/
