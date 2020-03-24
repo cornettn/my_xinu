@@ -31,7 +31,7 @@ void sendmoremsg() {
 
   bsend(recvpid, 101);
   bsend(recvpid, 102);
-  bsend(recvpid, 123);
+  bsend(recvpid, 103);
 }
 
 void recvmsg() {
