@@ -4,33 +4,42 @@
 
 #define UNUSED(x) (void)(x)
 
+pid32 recvpid;
+void sendmsg();
+void sendmoremsg();
+void recvmsg();
+
 process	main(void)
 {
-//      int zero = 0;
-//      int divide_by_zero = 1 / zero;
-//      UNUSED(divide_by_zero);
-
-    	kprintf("\nI'm the first XINU app and running function main() in system/main.c.\n");
-    	kprintf("\nI was created by nulluser() in system/initialize.c using create().\n");
-    	kprintf("\nMy creator will turn itself into the do-nothing null process.\n");
-    	kprintf("\nI will create a second XINU app that runs shell() in shell/shell.c as an example.\n");
-    	kprintf("\nYou can do something else, or do nothing; it's completely up to you.\n");
-    	kprintf("\n...creating a shell\n");
-
-
-      /* Run the Xinu shell */
-
-	recvclr();
-	resume(create(shell, 8192, 50, "shell", 1, CONSOLE));
-
-	/* Wait for shell to exit and recreate it */
-
-	while (TRUE) {
-		receive();
-		sleepms(200);
-		kprintf("\n\nMain process recreating shell\n\n");
-		resume(create(shell, 4096, 20, "shell", 1, CONSOLE));
-	}
-	return OK;
+  rcreate(sendmsg, 1024, 100, "sendmsg", 0, NULL);
+  rcreate(sendmoremsg, 1024, 100, "sendmoremsg", 0 , NULL);
+  recvpid = rcreate(recvmsg, 1024, 100, "recvmsg", 0, NULL);
+  bsend(recvpid, 50000);
 
 }
+
+void sendmsg() {
+  sleepms(50);
+
+  bsend(recvpid, 1);
+  bsend(recvpid, 2);
+  bsend(recvpid, 3);
+}
+
+void sendmoremsg() {
+  sleepms(50);
+
+  bsend(recvpid, 101);
+  bsend(recvpid, 102);
+  bsend(recvpid, 123);
+}
+
+void recvmsg() {
+  sleepms(1000);
+
+  while(1) {
+    int32 msg = receive();
+    XDEBUG_KPRINTF("recvmsg: received %d\n", msg);
+  }
+}
+
