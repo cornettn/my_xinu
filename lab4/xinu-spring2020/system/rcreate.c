@@ -38,7 +38,10 @@ pid32	rcreate(
 	prcount++;
 	prptr = &proctab[pid];
 
-	/* Initialize process table entry for new process */
+  /* Initialize the blocked senders queue for this proc */
+  qid16 blockedsenders = newqueue();
+
+  /* Initialize process table entry for new process */
 	prptr->prstate = PR_SUSP;	/* Initial state is suspended	*/
 	prptr->prprio = priority;
 	prptr->prstkbase = (char *)saddr;
@@ -49,6 +52,8 @@ pid32	rcreate(
 	prptr->prsem = -1;
 	prptr->prparent = (pid32)getpid();
 	prptr->prhasmsg = FALSE;
+  prptr->prsenderflag = FALSE;
+  prptr->prblockedsenders = blockedsenders;
 
 	/* Set up stdin, stdout, and stderr descriptors for the shell	*/
 	prptr->prdesc[0] = CONSOLE;
@@ -101,7 +106,7 @@ pid32	rcreate(
   }
 
   restore(mask);
-	return pid;
+  return pid;
 }
 
 /*------------------------------------------------------------------------
