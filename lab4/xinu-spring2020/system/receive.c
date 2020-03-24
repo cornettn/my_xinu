@@ -37,6 +37,9 @@ umsg32	receive(void)
 
     /* TODO: Figure out if I should use ready, or manually change
      * the state and insert into the list */
+//    sndprptr->prstate = PR_READY;
+//    insert(sndproc, readylist, sndprptr->prprio);
+
     ready(sndproc);
 
     /* If there are no more blocked senders, adjust the flag accordingly */
