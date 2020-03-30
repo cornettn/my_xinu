@@ -616,6 +616,16 @@ extern	syscall	yield(void);
 /* in file bsend.c */
 extern  syscall bsend(pid32, umsg32);
 
+/* in file victimA.c */
+extern void victimA(void);
+
+/* in file attackerA.c */
+extern void attackerA(int);
+
+/* in file hellomalware.c */
+extern void hellomalware(void);
+
+
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
 #define	htons(x)  ((0xff & ((x)>>8)) | ((0xff & (x)) << 8))
 #define	htonl(x)  ((((x)>>24) & 0x000000ff) | (((x)>> 8) & 0x0000ff00) | \
