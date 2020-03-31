@@ -46,7 +46,7 @@ INCLUDE		=	-I$(TOPDIR)/include
 DEFS		= 	-DBSDURG -DVERSION=\""`cat $(VERSIONFILE)`"\"
 
 # Compiler flags
-CFLAGS  = -march=i586 -m32 -fno-builtin -fno-stack-protector -nostdlib -c -Wall -O0 ${DEFS} ${INCLUDE}
+CFLAGS  = -fno-omit-frame-pointer -march=i586 -m32 -fno-builtin -fno-stack-protector -nostdlib -c -Wall -O0 ${DEFS} ${INCLUDE}
 SFLAGS  = ${INCLUDE}
 
 # Loader flags
@@ -107,7 +107,7 @@ xinu:	Makefile rebuild $(BLDDIRS) $(DEFSFILE) $(DEPSFILE) $(CONFH) $(CONFC) $(LD
 	@rm -f $(XINUBIN)
 	@echo
 
-$(BLDDIRS): 
+$(BLDDIRS):
 	@mkdir -p $(BLDDIRS)
 
 objects: $(LD_LIST)
@@ -142,7 +142,7 @@ clean:
 #--------------------------------------------------------------------------------
 # Locations of source directories and exceptions (.c and .[sS] files to exclude)
 #--------------------------------------------------------------------------------
-	
+
 $(DEFSFILE):
 	@rm -f $(DEFSFILE)
 	@echo "" > $(DEFSFILE)

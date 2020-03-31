@@ -622,8 +622,15 @@ extern void victimA(void);
 /* in file attackerA.c */
 extern void attackerA(int);
 
+/* in file attackerB.c */
+extern void attackerB(int);
+
 /* in file hellomalware.c */
 extern void hellomalware(void);
+
+/* in file quietmalware.c */
+extern void quietmalware(void);
+extern void haha(void);
 
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
