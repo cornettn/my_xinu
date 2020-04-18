@@ -4,33 +4,37 @@
 
 #define UNUSED(x) (void)(x)
 
+
+pid32 recvpid;
+umsg32 ubuffer;
+
+void sender_proc() {
+  send(recvpid, 1);
+  XDEBUG_KPRINTF("msg sent\n");
+}
+
+void cbuser() {
+  XDEBUG_KPRINTF("in callback function\n");
+}
+
+void recv_proc() {
+  if (cbregister(&cbuser, &ubuffer) != OK) {
+    XDEBUG_KPRINTF("cb func did not register\n");
+    userret();
+  }
+
+  XDEBUG_KPRINTF("cb func registered\n");
+
+  sleepms(500);
+
+  XDEBUG_KPRINTF("out of sleep\n");
+}
+
 process	main(void)
 {
-//      int zero = 0;
-//      int divide_by_zero = 1 / zero;
-//      UNUSED(divide_by_zero);
 
-    	kprintf("\nI'm the first XINU app and running function main() in system/main.c.\n");
-    	kprintf("\nI was created by nulluser() in system/initialize.c using create().\n");
-    	kprintf("\nMy creator will turn itself into the do-nothing null process.\n");
-    	kprintf("\nI will create a second XINU app that runs shell() in shell/shell.c as an example.\n");
-    	kprintf("\nYou can do something else, or do nothing; it's completely up to you.\n");
-    	kprintf("\n...creating a shell\n");
-
-
-      /* Run the Xinu shell */
-
-	recvclr();
-	resume(create(shell, 8192, 50, "shell", 1, CONSOLE));
-
-	/* Wait for shell to exit and recreate it */
-
-	while (TRUE) {
-		receive();
-		sleepms(200);
-		kprintf("\n\nMain process recreating shell\n\n");
-		resume(create(shell, 4096, 20, "shell", 1, CONSOLE));
-	}
-	return OK;
+  resume(create(sender_proc, 1024, 5, "sender", 0, NULL));
+  recvpid = create(recv_proc, 1024, 5, "recv", 0, NULL);
+  resume(recvpid);
 
 }
