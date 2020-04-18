@@ -17,29 +17,37 @@ syscall cbregister(
 
   /* Check to ensure that fp lies within the bounds of text segment, and
    * mbufptr does not point inside the the text segment */
-  if (!( ((uint32)&fp < (uint32)&etext) && /* fp < end of text */
-         ((uint32)&fp >= (uint32)&text) /* fp >= beginning of text */
+  if (!( (uint32)fp >= (uint32)&text &&
+         (uint32)fp <= (uint32)&etext
        )) {
 
-    XDEBUG_KPRINTF("fp out of range: %08X\n", (uint32) &fp);
+    XDEBUG_KPRINTF("cbregister: BAD -- fp not in text segment: %08X\n", (uint32) &fp);
 
     /* fp is not within text segment bounds */
     return SYSERR;
   }
 
-  /* fp is within bounds, so check membufptr */
-  if (!((uint32)&mbufptr > (uint32)&etext)) {
+  XDEBUG_KPRINTF("cbregister: fp is in text segment\n");
 
-    XDEBUG_KPRINTF("mbufptr out of range\n");
+  /* fp is within bounds, so check membufptr */
+  if (!((uint32)mbufptr > (uint32)&etext)) {
+
+    XDEBUG_KPRINTF("cbregister: BAD -- mbufptr is in the text segment\n");
 
     /* mbufptr is inside text */
     return SYSERR;
    }
 
+  XDEBUG_KPRINTF("cbregister: mbufptr is not in text segment\n");
+
   /* Both arguments are now good to go */
 
+  /* Initialize the callback function fields */
   prptr->prcbptr = fp;
   prptr->prcbvalid = TRUE;
+
+  /* Initialize the processes bufptr field */
+  prptr->prmbufptr = mbufptr;
 
   return OK;
 }
