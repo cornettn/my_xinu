@@ -611,7 +611,14 @@ extern	syscall	write(did32, char *, uint32);
 extern	void	xdone(void);
 
 /* in file yield.c */
-extern	syscall	yield(void);
+extern syscall	yield(void);
+
+/* in file cbregister.c */
+extern syscall cbregister(void (* fp)(void), umsg32 *mbufptr);
+
+/* in file cbunregister.c */
+extern syscall cbunregister(void);
+
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
 #define	htons(x)  ((0xff & ((x)>>8)) | ((0xff & (x)) << 8))
