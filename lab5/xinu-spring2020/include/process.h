@@ -5,7 +5,21 @@
  */
 
 #define XINUTEST 0
-#define XINUDEBUG 0
+#define XINUDEBUG 1
+
+ /* for print required for labs */
+#if XINUTEST
+#define XTEST_KPRINTF(...) kprintf(__VA_ARGS__)
+#else
+#define XTEST_KPRINTF(...)
+#endif
+
+ /* User debug */
+#if XINUDEBUG
+#define XDEBUG_KPRINTF(...) kprintf(__VA_ARGS__)
+#else
+#define XDEBUG_KPRINTF(...)
+#endif
 
 
 /* Maximum number of processes in the system */
@@ -60,6 +74,16 @@ struct procent {		/* Entry in the process table		*/
 	umsg32	prmsg;		/* Message sent to this process		*/
 	bool8	prhasmsg;	/* Nonzero iff msg is valid		*/
 	int16	prdesc[NDESC];	/* Device descriptors for process	*/
+
+  /* entries for callback */
+  bool8 prcbvalid;        /* Nonzero if callback function has been registered */
+  void (* prcbptr)();     /* Pointer to callback function */
+  umsg32 *prmbufptr;      /* Pointer to user space message buffer */
+  umsg32 prtmpbuf;        /* Temporary message buffer */
+  bool8 prtmpvalid;       /* Nonzero if temporary message buffer is non-empty */
+
+
+
 };
 
 /* Marker for the top of a process stack (used to help detect overflow)	*/
