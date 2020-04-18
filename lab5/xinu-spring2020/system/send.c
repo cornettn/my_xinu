@@ -2,6 +2,8 @@
 
 #include <xinu.h>
 
+#define UNREGISTERED (0)
+
 /*------------------------------------------------------------------------
  *  send  -  Pass a message to a process and start recipient if waiting
  *------------------------------------------------------------------------
@@ -25,10 +27,33 @@ syscall	send(
 		restore(mask);
 		return SYSERR;
 	}
-	prptr->prmsg = msg;		/* Deliver message		*/
-	prptr->prhasmsg = TRUE;		/* Indicate message is waiting	*/
 
-	/* If recipient waiting or in timed-wait make it ready */
+
+  if (prptr->prcbvalid != UNREGISTERED) {
+    /* The receiving process has a registered cb function */
+
+    prptr->prtmpvalid = TRUE;
+    prptr->prtmpbuf = msg;
+
+    if (prptr->prstate == PR_SLEEP) {
+      /* case (i) */
+
+    }
+    else if (prptr->prstate == PR_READY) {
+      /* case (ii) */
+
+    }
+  }
+  else {
+
+    /* send mesasge without a callback  */
+    prptr->prmsg = msg;		/* Deliver message		*/
+	  prptr->prhasmsg = TRUE;		/* Indicate message is waiting	*/
+
+  }
+
+
+  /* If recipient waiting or in timed-wait make it ready */
 
 	if (prptr->prstate == PR_RECV) {
 		ready(pid);
