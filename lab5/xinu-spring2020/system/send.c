@@ -2,8 +2,6 @@
 
 #include <xinu.h>
 
-#define UNREGISTERED (0)
-
 /*------------------------------------------------------------------------
  *  send  -  Pass a message to a process and start recipient if waiting
  *------------------------------------------------------------------------
@@ -29,24 +27,42 @@ syscall	send(
 	}
 
 
-  if (prptr->prcbvalid != UNREGISTERED) {
+  if (prptr->prcbvalid) {
     /* The receiving process has a registered cb function */
+
+    XDEBUG_KPRINTF("send.c: recevier has valid cb function\n");
+
+    if (prptr->prtmpvalid) {
+      /* receiving process has a message already and the cb func has not been
+       * called yet. Discard the new message. */
+
+      XDEBUG_KPRINTF("send.c: receiver already has a message\n");
+      return OK;
+      //msg = prptr->prtmpbuf;
+    }
 
     prptr->prtmpvalid = TRUE;
     prptr->prtmpbuf = msg;
 
+    XDEBUG_KPRINTF("send.c: Setting prtmpbuf to %d\n", msg);
+
     if (prptr->prstate == PR_SLEEP) {
       /* case (i) */
+      XDEBUG_KPRINTF("send.c: case (i)\n");
+
 
     }
     else if (prptr->prstate == PR_READY) {
       /* case (ii) */
+      XDEBUG_KPRINTF("send.c: case (ii)\n");
 
     }
   }
   else {
 
     /* send mesasge without a callback  */
+
+    XDEBUG_KPRINTF("send.c: Recv proc has no cb func\n");
     prptr->prmsg = msg;		/* Deliver message		*/
 	  prptr->prhasmsg = TRUE;		/* Indicate message is waiting	*/
 

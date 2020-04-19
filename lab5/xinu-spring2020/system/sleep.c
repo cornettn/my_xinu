@@ -54,7 +54,9 @@ syscall	sleepms(
   /* Process is awake now */
 
   struct procent *prptr = &proctab[currpid];
-  if (prptr->prcbvalid != FALSE) {
+  if (prptr->prcbvalid) {
+
+    XDEBUG_KPRINTF("sleepms: changing return addrs\n");
 
     /* Process has a callback function */
     long ogretaddr;

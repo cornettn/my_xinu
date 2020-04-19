@@ -42,9 +42,14 @@ syscall cbregister(
 
   /* Both arguments are now good to go */
 
+  prptr = &proctab[currpid];
+
+
   /* Initialize the callback function fields */
   prptr->prcbptr = fp;
   prptr->prcbvalid = TRUE;
+
+  XDEBUG_KPRINTF("cbregister: Set prcbvalid to TRUE\n");
 
   /* Initialize the processes bufptr field */
   prptr->prmbufptr = mbufptr;
