@@ -24,6 +24,9 @@ extern	uint32	clkcount(void);
 /* in file clkhandler.c */
 extern	interrupt clkhandler(void);
 
+/* in file clkdisphelper.c */
+extern void clkdisphelper(void);
+
 /* in file clkinit.c */
 extern	void	clkinit(void);
 
@@ -618,6 +621,9 @@ extern syscall cbregister(void (* fp)(void), umsg32 *mbufptr);
 
 /* in file cbunregister.c */
 extern syscall cbunregister(void);
+
+/* in file cbuser.c */
+extern void cbuser(void);
 
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
