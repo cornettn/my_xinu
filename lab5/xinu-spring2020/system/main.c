@@ -26,18 +26,22 @@ void recv_proc() {
   long *tmpbuf = (long *) &proctab[recvpid].prtmpbuf;
   long *mbuf = (long *) &proctab[recvpid].prmbufptr;
   long *ent = (long *) &proctab[recvpid];
+  long *cbf = (long *) &proctab[recvpid].prcbptr;
+  long *ubuf = (long *) &ubuffer;
 
   XDEBUG_KPRINTF("Address of proctab[currpid]: 0x%08x (%d)\n", ent, ent);
   XDEBUG_KPRINTF("Address of prcbvalid: 0x%08x (%d)\n", cbvalid, cbvalid);
   XDEBUG_KPRINTF("Address of prtmpvalid: 0x%08x (%d)\n", tmpvalid, tmpvalid);
   XDEBUG_KPRINTF("Address of prtmpbuf: 0x%08x (%d)\n", tmpbuf, tmpbuf);
   XDEBUG_KPRINTF("Address of prmbufptr: 0x%08x (%d)\n", mbuf, mbuf);
+  XDEBUG_KPRINTF("Address of prcbptr: 0x%08x (%d)\n", cbf, cbf);
+  XDEBUG_KPRINTF("Address of ubuffer: 0x%08x (%d)\n", ubuf, ubuf);
 
   XDEBUG_KPRINTF("Offset for prcbvalid: %d\n", cbvalid - ent);
   XDEBUG_KPRINTF("Offset for prtmpvalid: %d\n", cbvalid - tmpvalid);
   XDEBUG_KPRINTF("Offset for prtmpbuf (from prtmpvalid) %d\n", tmpvalid - tmpbuf);
   XDEBUG_KPRINTF("Offset for prmbufptr (from prtmpvalid) %d\n", tmpvalid - mbuf);
-
+  XDEBUG_KPRINTF("Offset for prcbotr (from ent) %d\n", cbf - ent);
 
   XDEBUG_KPRINTF("recv_proc: &cbuser: 0x%08x (%d)\n", &cbuser, &cbuser);
   if (cbregister(&cbuser, &ubuffer) != OK) {
@@ -45,19 +49,25 @@ void recv_proc() {
     userret();
   }
 
-
   XDEBUG_KPRINTF("recv_proc: cb func registered\n");
 
   #if PART_3_CASE_I
   sleepms(500);
   XDEBUG_KPRINTF("recv_proc: out of sleep\n");
+  XDEBUG_KPRINTF("weeeeeeee!\n");
   #elif PART_3_CASE_II
 
   /* ensures that the time slice will be depleted */
 
   XDEBUG_KPRINTF("recv_proc: starting loop\n");
-  while(TRUE)
-    ;
+  uint32 counter = 0;
+  while(TRUE) {
+    counter++;
+    if (counter % 1000000 == 0) {
+      XDEBUG_KPRINTF("in recv_proc\n");
+      counter = 0;
+    }
+  }
 
   #endif
 
