@@ -27,35 +27,26 @@ syscall	send(
 	}
 
 
-  if (prptr->prcbvalid) {
-    /* The receiving process has a registered cb function */
+  if (prptr->prstate == PR_SLEEP ||
+      prptr->prstate == PR_READY) {
+    if (prptr->prcbvalid) {
+      /* The receiving process has a registered cb function */
 
-    XDEBUG_KPRINTF("send.c: recevier has valid cb function\n");
+      XDEBUG_KPRINTF("send.c: recevier has valid cb function\n");
 
-    if (prptr->prtmpvalid) {
-      /* receiving process has a message already and the cb func has not been
-       * called yet. Discard the new message. */
+      if (prptr->prtmpvalid) {
+        /* receiving process has a message already and the cb func has not been
+        * called yet. Discard the new message. */
 
-      XDEBUG_KPRINTF("send.c: receiver already has a message\n");
-      return OK;
-      //msg = prptr->prtmpbuf;
-    }
+        XDEBUG_KPRINTF("send.c: receiver already has a message\n");
+        return OK;
+        //msg = prptr->prtmpbuf;
+      }
 
-    prptr->prtmpvalid = TRUE;
-    prptr->prtmpbuf = msg;
+      prptr->prtmpvalid = TRUE;
+      prptr->prtmpbuf = msg;
 
-    XDEBUG_KPRINTF("send.c: Setting prtmpbuf to %d\n", msg);
-
-    if (prptr->prstate == PR_SLEEP) {
-      /* case (i) */
-      XDEBUG_KPRINTF("send.c: case (i)\n");
-
-
-    }
-    else if (prptr->prstate == PR_READY) {
-      /* case (ii) */
-      XDEBUG_KPRINTF("send.c: case (ii)\n");
-
+      XDEBUG_KPRINTF("send.c: Setting prtmpbuf to %d\n", msg);
     }
   }
   else {
