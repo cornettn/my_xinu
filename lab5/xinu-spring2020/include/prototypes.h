@@ -624,6 +624,7 @@ extern syscall cbunregister(void);
 
 /* in file cbuser.c */
 extern void cbuser(void);
+extern umsg32 ubuffer;
 
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
