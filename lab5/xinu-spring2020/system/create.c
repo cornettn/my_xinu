@@ -55,6 +55,11 @@ pid32	create(
 	prptr->prdesc[1] = CONSOLE;
 	prptr->prdesc[2] = CONSOLE;
 
+
+
+  prptr->prcbvalid = FALSE;
+  prptr->prtmpvalid = FALSE;
+
 	/* Initialize stack as if the process was called		*/
 
 	*saddr = STACKMAGIC;
