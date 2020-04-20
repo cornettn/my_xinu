@@ -43,58 +43,91 @@ clkdisp:
                             // This means that message has not been received
 
 
-    /* Reset prtmpvalid to 0, move prtmpbuf to prmbufptr
+   /* Reset prtmpvalid to 0, move prtmpbuf to prmbufptr */
 
     movl $0, (%ebx)         // Change prtmpvalid to be 0
     subl $4, %ebx           // ebx = &proctab[currpid].prtmpbuf
     movl (%ebx), %eax       // eax = prtmpbuf
     subl $4, %ebx           // ebx = &proctab[currpid].prmbufptr
-    movl %eax, (%ebx)       // *ebx = eax
+    movl (%ebx), %ecx       // ecx = &prmbufptr
+    movl %eax, (%ecx)       // *ebx = eax
 
 
-    /* Manipulate the stack to arrange for the correct return addresses */
-
+  /* Manipulate the stack to arrange for the correct return addresses */
+    /* Move the 8 general registers down one */
 
     movl $0, %ecx
     movl (%esp), %eax
-    pushl %eax
+    movl %eax, -4(%esp)
 
     movl $1, %ecx
+    movl 4(%esp), %eax
+    movl %eax, (%esp)
+
+    movl $2, %ecx
     movl 8(%esp), %eax
     movl %eax, 4(%esp)
 
-    movl $2, %ecx
-    movl 12(%esp), %eax
-    movl %eax, 8(%eax)
-
     movl $3, %ecx
+    movl 12(%esp), %eax
+    movl %eax, 8(%esp)
+
+    movl $4, %ecx
     movl 16(%esp), %eax
     movl %eax, 12(%esp)
 
-    movl $4, %ecx
-    movl 20(%esp), %eax
-    movl %eax, 16(%eax)
-
     movl $5, %ecx
-    movl 24(%esp), %eax
-    movl %eax, 20(%eax)
+    movl 20(%esp), %eax
+    movl %eax, 16(%esp)
 
     movl $6, %ecx
-    movl 28(%esp), %eax
-    movl %eax, 24(%eax)
+    movl 24(%esp), %eax
+    movl %eax, 20(%esp)
 
     movl $7, %ecx
+    movl 28(%esp), %eax
+    movl %eax, 24(%esp)
+
+    /* Move EFLAGS, CS, and EIP down one */
+
+    movl $8, %ecx
     movl 32(%esp), %eax
     movl %eax, 28(%esp)
 
-    // shift EIP, CS, and EFLAGS
-    movl $8, %ecx
-    movl 36(%esp), %eax
-    movl %eax, 32(%eax)   // EIP
-
     movl $9, %ecx
-    movl 40(%esp), %eax
+    movl 36(%esp), %eax
+    movl %eax, 32(%esp)
 
+    movl $10, %ecx
+    movl 40(%esp), %eax
+    movl %eax, 36(%esp)
+
+    /* Move the original EIP into the newly allocated spot */
+
+    movl $11, %ecx
+    movl 28(%esp), %eax
+    movl %eax, 40(%esp)
+
+    /* Obtain the address for the cb function */
+    /* At this point %edx = address of curr process entry */
+
+    movl $12, %ecx
+    movl %edx, %ebx       // ebx = &proctab[currpid]
+    addl $60, %ebx        // ebx = 60 + ebx (offset for prcbptr)
+                          // ebx should now be the address of the function pointer
+
+    /* Overwrite the current value of EIP to be ebx */
+
+    movl $13, %ecx
+    movl (%ebx), %eax
+    movl %eax, 28(%esp)
+
+    /* Update the stack pointer to accomodate for shifting */
+
+    movl $14, %ecx
+    subl $4, %esp
+
+    movl $15, %ecx
 _endclkdisp:
 		sti			# Restore interrupt status
 		popal			# Restore registers
