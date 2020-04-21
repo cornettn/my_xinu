@@ -21,6 +21,15 @@ syscall	kill(
 		return SYSERR;
 	}
 
+
+  prptr = &proctab[pid];
+  struct inusememblk *head = prptr->prheaphd;
+  while (head != NULL) {
+    head = head->mnext;
+    memextract(head, head->memblockptr);
+  }
+
+
 	if (--prcount <= 1) {		/* Last user process completes	*/
 		xdone();
 	}
