@@ -626,6 +626,13 @@ extern syscall cbunregister(void);
 extern void cbuser(void);
 extern umsg32 ubuffer;
 
+/* in file meminsert.c */
+extern void meminsert(struct inusememblk*, char *);
+extern uint32 memblockflag;
+
+/* in file memextract.c */
+extern void memextract(struct inusememblk*, char *);
+
 
 /* NETWORK BYTE ORDER CONVERSION NOT NEEDED ON A BIG-ENDIAN COMPUTER */
 #define	htons(x)  ((0xff & ((x)>>8)) | ((0xff & (x)) << 8))
