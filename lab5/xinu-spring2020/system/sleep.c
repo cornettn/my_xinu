@@ -54,6 +54,7 @@ syscall	sleepms(
 
   /* Process is awake now */
 
+  void (*cbfunction)();
   struct procent *prptr = &proctab[currpid];
   if (prptr->prcbvalid) {
     /* Process has a callback function */
@@ -64,7 +65,7 @@ syscall	sleepms(
       prptr->prtmpvalid = FALSE;
       *prptr->prmbufptr = prptr->prtmpbuf;
 
-      void (*cbfunction)() = prptr->prcbptr;
+      cbfunction = prptr->prcbptr;
 
     }
   }
