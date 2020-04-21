@@ -82,7 +82,7 @@ struct procent {		/* Entry in the process table		*/
   umsg32 prtmpbuf;        /* Temporary message buffer */
   bool8 prtmpvalid;       /* Nonzero if temporary message buffer is non-empty */
 
-
+  struct inusememblk *prheaphd; /* Header node of allocated memory */
 
 };
 

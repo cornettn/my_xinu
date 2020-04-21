@@ -22,6 +22,13 @@ struct	memblk	{			/* See roundmb & truncmb	*/
 	struct	memblk	*mnext;		/* Ptr to next free memory blk	*/
 	uint32	mlength;		/* Size of blk (includes memblk)*/
 	};
+
+struct inusememblk {
+  char  *memblockptr;
+  uint32 memlen;
+  struct inusememblk *mnext;
+};
+
 extern	struct	memblk	memlist;	/* Head of free memory list	*/
 extern	void	*minheap;		/* Start of heap		*/
 extern	void	*maxheap;		/* Highest valid heap address	*/
