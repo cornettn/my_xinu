@@ -21,6 +21,13 @@ char  	*getmem(
 
 	nbytes = (uint32) roundmb(nbytes);	/* Use memblk multiples	*/
 
+  if (memblockflag) {
+    nbytes += 8;
+    memblockflag = 0;
+  }
+
+  XDEBUG_KPRINTF("getmem: allocating %d bytes\n", nbytes);
+
 	prev = &memlist;
 	curr = memlist.mnext;
 	while (curr != NULL) {			/* Search free list	*/

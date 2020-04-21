@@ -25,6 +25,11 @@ syscall	freemem(
 	nbytes = (uint32) roundmb(nbytes);	/* Use memblk multiples	*/
 	block = (struct memblk *)blkaddr;
 
+  if (memblockflag) {
+    nbytes += 8;
+    memblockflag = 0;
+  }
+
 	prev = &memlist;			/* Walk along free list	*/
 	next = memlist.mnext;
 	while ((next != NULL) && (next < block)) {
