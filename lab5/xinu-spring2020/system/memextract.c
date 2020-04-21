@@ -22,21 +22,18 @@ void memextract(
   if (currblk->memblockptr == memptr) {
     hdptr = currblk->mnext;
     memblockflag = 1;
-    freemem(memptr, currblk->memlen);
+    freemem((char *)currblk, 8);
     return;
   }
 
   /* Iterate through list to find */
 
-  while (TRUE) {
+  while (currblk->mnext != NULL) {
     if (currblk->mnext->memblockptr == memptr) {
-      currblk->mnext = currblk->mnext->mnext;
+      struct inusememblk *nxt = currblk->mnext->mnext;
       memblockflag = 1;
-      freemem(memptr, currblk->mnext->memlen);
-      break;
-    }
-
-    if (currblk->mnext == NULL) {
+      freemem((char *)currblk->mnext, 8);
+      currblk->mnext = nxt;
       break;
     }
   }
