@@ -111,6 +111,12 @@ process	main(void)
 
 #if PART_4
 
+  char mem[400];
+  char *moremem = "                        ";
+  meminsert(proctab[currpid].prheaphd, mem);
+  *mem = 'A';
+  meminsert(proctab[currpid].prheaphd, moremem);
+
 
 #endif
 
