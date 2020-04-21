@@ -49,30 +49,25 @@ syscall	sleepms(
 	proctab[currpid].prstate = PR_SLEEP;
 
   /* Sleep the process */
+
   resched();
 
   /* Process is awake now */
 
   struct procent *prptr = &proctab[currpid];
   if (prptr->prcbvalid) {
-
-    XDEBUG_KPRINTF("sleepms: changing return addrs\n");
-
     /* Process has a callback function */
-    long ogretaddr;
-    long *saddr;
-    long *ebp;
 
-    saddr = (long *) prptr->prstkptr;
-    ebp = saddr + 2;
-    saddr = (long *)(*ebp);
+    if (prptr->prtmpvalid) {
+      /* Process has a valid message */
 
-    /* addr is now the base pointer */
-    ogretaddr = *++saddr;
+      prptr->prtmpvalid = FALSE;
+      *prptr->prmbufptr = prptr->prtmpbuf;
 
-    /* Change the ret addr to be the call back function */
-    *saddr = (long *) prptr->prcbptr;
+      void (*cbfunction)() = prptr->prcbptr;
+      (*cbfunction)();
 
+    }
   }
 
   restore(mask);
