@@ -111,11 +111,17 @@ process	main(void)
 
 #if PART_4
 
-  char mem[400];
-  char *moremem = "                        ";
-  meminsert(proctab[currpid].prheaphd, mem);
-  *mem = 'A';
-  meminsert(proctab[currpid].prheaphd, moremem);
+  XDEBUG_KPRINTF("getting mem\n");
+  char *test = (char *) getmem(400);
+  XDEBUG_KPRINTF("got mem\n");
+
+  XDEBUG_KPRINTF("getting mem\n");
+  char *anothertest = (char *) getmem(300);
+  XDEBUG_KPRINTF("got mem\n");
+
+  XDEBUG_KPRINTF("freeing mem\n");
+  freemem(test, 400);
+  XDEBUG_KPRINTF("freed mem\n");
 
 
 #endif

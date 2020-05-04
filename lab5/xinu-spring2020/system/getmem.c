@@ -2,6 +2,9 @@
 
 #include <xinu.h>
 
+
+uint32 memsize;
+
 /*------------------------------------------------------------------------
  *  getmem  -  Allocate heap storage, returning lowest word address
  *------------------------------------------------------------------------
@@ -21,11 +24,6 @@ char  	*getmem(
 
 	nbytes = (uint32) roundmb(nbytes);	/* Use memblk multiples	*/
 
-  if (memblockflag) {
-    nbytes += 8;
-    memblockflag = 0;
-  }
-
   XDEBUG_KPRINTF("getmem: allocating %d bytes\n", nbytes);
 
 	prev = &memlist;
@@ -35,6 +33,13 @@ char  	*getmem(
 		if (curr->mlength == nbytes) {	/* Block is exact match	*/
 			prev->mnext = curr->mnext;
 			memlist.mlength -= nbytes;
+      if (!memblockflag) {
+        memsize = nbytes;
+        meminsert(proctab[currpid].prheaphd, (char *)curr);
+      }
+      else {
+        memblockflag = 0;
+      }
 			restore(mask);
 			return (char *)(curr);
 
@@ -45,6 +50,13 @@ char  	*getmem(
 			leftover->mnext = curr->mnext;
 			leftover->mlength = curr->mlength - nbytes;
 			memlist.mlength -= nbytes;
+      if (!memblockflag) {
+        memsize = nbytes;
+        meminsert(proctab[currpid].prheaphd, (char *)curr);
+      }
+      else {
+        memblockflag = 0;
+      }
 			restore(mask);
 			return (char *)(curr);
 		} else {			/* Move to next block	*/

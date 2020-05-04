@@ -629,6 +629,7 @@ extern umsg32 ubuffer;
 /* in file meminsert.c */
 extern void meminsert(struct inusememblk*, char *);
 extern uint32 memblockflag;
+extern uint32 memsize;
 
 /* in file memextract.c */
 extern void memextract(struct inusememblk*, char *);
