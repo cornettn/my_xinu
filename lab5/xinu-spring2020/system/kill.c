@@ -25,8 +25,8 @@ syscall	kill(
   prptr = &proctab[pid];
   struct inusememblk *head = prptr->prheaphd;
   while (head != NULL) {
-    struct inusememblk *nxt = head->next;
-    freemem(head);
+    struct inusememblk *nxt = head->mnext;
+    freemem((char *) head, head->memlen);
     head = nxt;
 
   }
