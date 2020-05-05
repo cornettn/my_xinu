@@ -35,7 +35,7 @@ char  	*getmem(
 			memlist.mlength -= nbytes;
       if (!memblockflag) {
         memsize = nbytes;
-        meminsert(proctab[currpid].prheaphd, (char *)curr);
+//        meminsert(proctab[currpid].prheaphd, (char *)curr);
       }
       else {
         memblockflag = 0;
@@ -52,7 +52,7 @@ char  	*getmem(
 			memlist.mlength -= nbytes;
       if (!memblockflag) {
         memsize = nbytes;
-        meminsert(proctab[currpid].prheaphd, (char *)curr);
+//        meminsert(proctab[currpid].prheaphd, (char *)curr);
       }
       else {
         memblockflag = 0;

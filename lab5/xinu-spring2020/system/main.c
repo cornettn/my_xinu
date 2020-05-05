@@ -4,9 +4,9 @@
 
 #define UNUSED(x) (void)(x)
 
-#define PART_3_CASE_I (0)
-#define PART_3_CASE_II (0)
-#define PART_4 (1)
+#define PART_3_CASE_I (1)
+#define PART_3_CASE_II (1)
+#define PART_4 (0)
 
 pid32 recvpid;
 umsg32 ubuffer;

@@ -66,6 +66,7 @@ syscall	sleepms(
       *prptr->prmbufptr = prptr->prtmpbuf;
 
       cbfunction = prptr->prcbptr;
+      (*cbfunction)();
 
     }
   }
@@ -73,6 +74,5 @@ syscall	sleepms(
   restore(mask);
 
   // Call the function in user context
-  (*cbfunction)();
 	return OK;
 }

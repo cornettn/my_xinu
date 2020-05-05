@@ -27,7 +27,7 @@ syscall	freemem(
 
   if (!memblockflag) {
     memsize = nbytes;
-    memextract(proctab[currpid].prheaphd, (char *)blkaddr);
+//    memextract(proctab[currpid].prheaphd, (char *)blkaddr);
   }
   else {
     memblockflag = 0;
